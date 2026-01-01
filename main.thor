@@ -60,4 +60,9 @@ class Tracker < Thor
     Creator.add_asset(name, initial_value, currency_code)
     puts 'asset created :)'
   end
+
+  desc 'list', 'list all the assets that are active and there current value'
+  def list
+    Logger.log_assets
+  end
 end

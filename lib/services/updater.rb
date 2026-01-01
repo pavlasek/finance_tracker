@@ -35,10 +35,10 @@ module Updater
     if summary_date.nil?
       FileController.write_summary(date, initial_value.to_s)
     elsif summary_date == date
-      complete_value = value.to_f + initial_value.to_f
+      complete_value = (value.to_f + initial_value.to_f).round(2)
       FileController.update_summary(date, complete_value.to_s)
     else
-      complete_value = value.to_f + initial_value.to_f
+      complete_value = (value.to_f + initial_value.to_f).round(2)
       FileController.write_summary(date, complete_value.to_s)
     end
   end

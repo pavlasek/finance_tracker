@@ -7,18 +7,18 @@ require_relative 'data_fetcher'
 module Logger
   def self.log_help
     puts '----------------------------------------------------------------------'
-
     puts 'COMMMANDS TO USE:'
     puts ' - help - will show the help'
     puts ' - summary - shows a summary of all the assets'
     puts ' - update_all - update values of all the assets'
     puts ' - add_asset - add the assets into the database'
+    puts ' - list - shows the list of all the assets with their current balance'
     puts '----------------------------------------------------------------------'
   end
 
   def self.log_summary
     puts '----------------------------------------------------------------------'
-    summary, date = Fetcher.fetch_summarry
+    date, summary = Fetcher.fetch_summarry
 
     if summary && date
       puts " - networth: #{summary} CZK"
@@ -27,6 +27,17 @@ module Logger
       puts ' - no known records to make a summary...'
     end
 
+    puts '----------------------------------------------------------------------'
+  end
+
+  def self.log_assets
+    puts '----------------------------------------------------------------------'
+    assets = Fetcher.fetch_assets
+
+    assets.each do |asset|
+      balance, currency_code = Fetcher.fetch_asset_info(asset)
+      puts "#{asset}: #{balance} #{currency_code}"
+    end
     puts '----------------------------------------------------------------------'
   end
 end
