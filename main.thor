@@ -4,6 +4,7 @@ require_relative 'lib/services/logger'
 require_relative 'lib/services/updater'
 require_relative 'lib/services/creator'
 require_relative 'lib/services/validator'
+require_relative 'lib/services/data_fetcher'
 
 class Tracker < Thor
   desc 'help', 'runs help for using the product'
@@ -18,7 +19,25 @@ class Tracker < Thor
 
   desc 'update_all', 'updates all the data'
   def update_all
-    Updater.update_all
+    assets = Fetcher.fetch_assets
+    if assets.empty?
+      puts 'there are no assets to update...'
+      return nil
+    end
+
+    assets.each do |asset|
+      valid_value = false
+      while valid_value == false
+        new_value = ask("input current value of #{asset}:")
+        if Validator.validate_initial_value(new_value)
+          valid_value = true
+        else
+          puts "value is invalid, use only numbers 1-9 and decimal point '.'"
+        end
+      end
+      
+      Updater.update_asset(asset, new_value)
+    end
   end
 
   desc 'add_asset', 'adds asset into the database of assets'
@@ -59,5 +78,10 @@ class Tracker < Thor
     puts 'creating the asset...'
     Creator.add_asset(name, initial_value, currency_code)
     puts 'asset created :)'
+  end
+
+  desc 'list', 'list all the assets that are active and there current value'
+  def list
+    Logger.log_assets
   end
 end

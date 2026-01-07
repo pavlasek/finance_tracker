@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# module FileController takes care of everything connected with file handling, it is the only place wher the app works with files
+# module FileController takes care of everything connected with file handling
+# it is the only place wher the app works with files
 module FileController
   def self.create_file(name, currency_code)
     # will create .txt file with given name at the personal data folder
@@ -9,7 +10,7 @@ module FileController
     File.new(file_path, 'w')
 
     File.open(file_path, 'w+') do |file|
-      file.puts "currecy: #{currency_code}"
+      file.puts "currency: #{currency_code}"
     end
   end
 
@@ -54,6 +55,19 @@ module FileController
     end
   end
 
+  def self.rewrite_asset_log(asset_name, value, date)
+    raw_asset_data = self.open_asset(asset_name)
+
+    raw_asset_data[-1] = "#{date} #{value}"
+
+    asset_path = File.expand_path("../../data/personal/individual_assets/#{asset_name}.txt", __dir__)
+    File.open(asset_path, 'w+') do |file|
+      raw_asset_data.each do |line|
+        file.puts(line)
+      end
+    end
+  end
+
   def self.write_summary(date, value)
     sum_path = File.expand_path('../../data/personal/sum.txt', __dir__)
 
@@ -69,5 +83,11 @@ module FileController
     lines[-1] = "#{date} #{value}"
 
     File.write(sum_path, "#{lines.join("\n")}\n")
+  end
+
+  def self.open_asset(asset)
+    asset_path = File.expand_path("../../data/personal/individual_assets/#{asset}.txt", __dir__)
+
+    File.readlines(asset_path, chomp: true)
   end
 end

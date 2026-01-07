@@ -34,4 +34,17 @@ module Fetcher
     # TODO: implement fetching actual data
     %w[CZK EUR]
   end
+
+  # fetches currency code and the last known balance of the asset
+  def self.fetch_asset_info(asset)
+    lines = FileController.open_asset(asset)
+
+    first_line_array = lines[0].split(' ')
+    currency_code = first_line_array[1]
+
+    last_line_array = lines[-1].split(' ')
+    balance = last_line_array[1]
+
+    [balance, currency_code]
+  end
 end
