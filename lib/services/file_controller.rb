@@ -55,6 +55,19 @@ module FileController
     end
   end
 
+  def self.rewrite_asset_log(asset_name, value, date)
+    raw_asset_data = self.open_asset(asset_name)
+
+    raw_asset_data[-1] = "#{date} #{value}"
+
+    asset_path = File.expand_path("../../data/personal/individual_assets/#{asset_name}.txt", __dir__)
+    File.open(asset_path, 'w+') do |file|
+      raw_asset_data.each do |line|
+        file.puts(line)
+      end
+    end
+  end
+
   def self.write_summary(date, value)
     sum_path = File.expand_path('../../data/personal/sum.txt', __dir__)
 

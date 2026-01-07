@@ -2,24 +2,30 @@
 
 require_relative 'data_fetcher'
 require_relative 'file_controller'
+require 'date'
+require_relative '../utils/utils'
 
 # module Updater takes care of updating the data
 module Updater
-  def self.update_all
-    assets = Fetcher.fetch_assets
-
-    if assets.empty?
-      puts 'there are no assets to update...'
-      return nil
-    end
-
-    assets.each do |asset|
-      update(asset)
-    end
-  end
-
-  def self.update(asset_name)
+  def self.update_asset(asset_name, new_value)
     puts "updating #{asset_name}..."
+    raw_asset = FileController.open_asset(asset_name)
+    _, currency = raw_asset[0].split
+
+    date, old_value = raw_asset[-1].split
+    today = DateTime.now.strftime('%d-%m-%Y')
+    if date == today
+      FileController.rewrite_asset_log(asset_name, new_value, today)
+    else
+      FileController.write_asset_log(asset_name, new_value, today)
+    end
+
+    #update summary
+    difference = (new_value.to_f - old_value.to_f).round(2)
+
+    diff_in_czk = convert_to_czk(currency, difference)
+
+    self.update_summary(diff_in_czk, today)
   end
 
   def self.update_assets_list(new_asset)
