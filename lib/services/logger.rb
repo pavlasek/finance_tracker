@@ -36,7 +36,15 @@ module Logger
 
     assets.each do |asset|
       balance, currency_code = Fetcher.fetch_asset_info(asset)
-      puts "#{asset}: #{balance} #{currency_code}"
+      
+      balance = format("%.2f", balance.to_f)
+
+      length_of_asset = asset.length
+      offset = 5 - Math.log10(balance.to_f).floor
+      dots = 20 - length_of_asset + offset
+      print "#{asset}:"
+      print "." * (dots) 
+      print "#{balance} #{currency_code}\n"
     end
     puts '----------------------------------------------------------------------'
   end
