@@ -1,5 +1,6 @@
 GEM
   specs:
+    json (2.18.0)
     thor (1.4.0)
 
 PLATFORMS
@@ -7,9 +8,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  json
   thor
 
 CHECKSUMS
+  json (2.18.0)
   thor (1.4.0)
 
 BUNDLED WITH

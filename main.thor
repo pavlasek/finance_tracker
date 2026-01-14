@@ -5,6 +5,7 @@ require_relative 'lib/services/updater'
 require_relative 'lib/services/creator'
 require_relative 'lib/services/validator'
 require_relative 'lib/services/data_fetcher'
+require_relative 'lib/services/graph_viewer'
 
 class Tracker < Thor
   desc 'help', 'runs help for using the product'
@@ -83,5 +84,10 @@ class Tracker < Thor
   desc 'list', 'list all the assets that are active and there current value'
   def list
     Logger.log_assets
+  end
+
+  desc 'graph_sum', 'shows graph of the summary in time'
+  def graph_sum
+    GraphViewer.view_sum
   end
 end

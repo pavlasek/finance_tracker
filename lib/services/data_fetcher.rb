@@ -16,6 +16,19 @@ module Fetcher
     [nil, nil] # if there are no logs in summary
   end
 
+  def self.fetch_summarry_list
+    raw_summary = FileController.open_summary
+
+    raw_summary_data = []
+
+    raw_summary.each do |line|
+      date, sum = line.split
+      raw_summary_data.append([date, sum])
+    end
+    
+    raw_summary_data
+  end
+
   def self.fetch_assets
     raw_assets = FileController.open_assets_summary
 
