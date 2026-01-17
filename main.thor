@@ -90,4 +90,33 @@ class Tracker < Thor
   def graph_sum
     GraphViewer.view_sum
   end
+
+  desc 'update', 'update the given asset'
+  def update
+    assets = Fetcher.fetch_assets
+
+    valid_name = false
+    while valid_name == false
+      asset = ask('input the asset name:')
+      if assets.include?(asset)
+        puts 'asset exists'
+        valid_name = true
+      else
+        puts 'asset does not exist'
+      end
+    end
+
+    valid_value = false
+      while valid_value == false
+        new_value = ask("input current value of #{asset}:")
+        if Validator.validate_initial_value(new_value)
+          valid_value = true
+        else
+          puts "value is invalid, use only numbers 1-9 and decimal point '.'"
+        end
+      end
+      
+      Updater.update_asset(asset, new_value)
+      puts "#{asset} was updated :)"
+  end
 end
