@@ -13,6 +13,8 @@ module Logger
     puts ' - update_all - update values of all the assets'
     puts ' - add_asset - add the assets into the database'
     puts ' - list - shows the list of all the assets with their current balance'
+    puts ' - graph_sum - shows the graph of the summary of the networth'
+    puts ' - update - updates only the given asset'
     puts '----------------------------------------------------------------------'
   end
 
